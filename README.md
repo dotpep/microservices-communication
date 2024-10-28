@@ -1,15 +1,27 @@
 # Microservices Communication in Dotnet Implementation
 
-- Dotnet C# (will be switched/implemented on Golang)
+**Tech Stack:**
+
+- Dotnet C# (will be switched/implemented on Golang this two services)
 - Two Services
 - Event Driven Architecture
 - SQL and InMemory (Cache) Databases
-- API Gateway
 - REST API
+- API Gateway
 - gRPC (sync)
+- RabbitMQ (async)
 - Docker
 - K8s
-- RabbitMQ (async)
+
+**SRC's:**
+
+- [.NET Microservices YT](https://youtu.be/DgVjEo3OGBI?si=SRhBSwyhBf85bbRg)
+
+## Demonstrations, Solution Architecture
+
+`System Design and Software/Service Architecuture`
+
+Schemas, Diagrams, UMLs, OpenAPI/Swagger endpoints docs img's:
 
 ## Architecture
 
@@ -80,11 +92,11 @@ and then any concrete class can come along and implement those interfaces.
 
 **Docker and K8s:**
 
-## Solution Architecture (System Design and Software/Service Architecuture)
+## Running Instructions
 
-Schema, Diagram, UML img's:
+## Commands Log
 
-## Commands
+### DotNET
 
 `dotnet --list-sdks`
 `dotnet --version`
@@ -109,3 +121,5 @@ change global.json (version to `dotnet --list-sdks` version):
 
 `dotnet add package PackageName -v 5.0.8`
 -v flag is --version
+
+### Golang
