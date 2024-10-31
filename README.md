@@ -94,6 +94,16 @@ Map DTO's:
 - Model to PlatformReadDto
 - PlatformCreatDto to Model
 
+**Controller and Actions:**
+
+Controller - API Endpoints.
+For testing API, I'm using Insomnia API client.
+
+Endpoint: `http://localhost:5000/api/platforms`
+
+- Get All Platforms
+- Create Platform
+
 ### Other Technologies and Tools
 
 **REST API:**
