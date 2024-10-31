@@ -101,7 +101,8 @@ For testing API, I'm using Insomnia API client.
 
 Endpoint: `http://localhost:5000/api/platforms`
 
-- Get All Platforms
+- Get Lists of All Platforms
+- Get Specific One Platform by ID
 - Create Platform
 
 ### Other Technologies and Tools
