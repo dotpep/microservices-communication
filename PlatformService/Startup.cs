@@ -38,6 +38,11 @@ namespace PlatformService
 
             // Default
             services.AddControllers();
+            
+            // Dto & Models - Mapper
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+            // Default
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PlatformService", Version = "v1" });

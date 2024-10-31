@@ -79,6 +79,21 @@ We use In-Memory database as temporary database and it is used in tests.
 
 **DTO's:**
 
+DTO's (Data Transfer Object) - external represantataion of our internal models.
+
+It is like contract for other services,
+if you like will change your Models,
+you will terminate this contract with other services like API's.
+Abstract your external and internal, like using Interfaces but for DB and data.
+
+- data privacy
+- contractual coupling
+
+Map DTO's:
+
+- Model to PlatformReadDto
+- PlatformCreatDto to Model
+
 ### Other Technologies and Tools
 
 **REST API:**
