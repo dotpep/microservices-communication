@@ -55,7 +55,11 @@ Schemas, Diagrams, UMLs, OpenAPI/Swagger endpoints docs img's:
 
 **Models:**
 
+Models with property, data annotations that will be auto validated.
+
 **DB Context:**
+
+DB Context that will connect context to InMemory DB with custom AppDbContext that inherit of DbContext with constructor and property of DbSet with Platform (models) class data type as plural Platforms.
 
 **Repository:**
 
@@ -65,6 +69,13 @@ We will inject our repository through Dependency Injection (DI), in startup clas
 Interface is Contract between apps/services and specifies what type of things,
 method signatures effectively that our repository will support,
 and then any concrete class can come along and implement those interfaces.
+
+**DB Preparation:**
+
+It is for testing in our In-Memory DB, with some generated and populated data in DB.
+
+Put some data to database.
+We use In-Memory database as temporary database and it is used in tests.
 
 **DTO's:**
 
