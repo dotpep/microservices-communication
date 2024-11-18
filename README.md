@@ -146,6 +146,11 @@ Endpoint: `http://localhost:5000/api/platforms`
 
 **Docker and K8s:**
 
+Docker is ???.
+Docker Container works above OS with Docker Engine (when VM like Virtual Box uses Hypervisor to make new OS top of your Host OS).
+
+Kubernates is Container Orchestrator, 
+
 ## Running Instructions
 
 ## Commands Log
@@ -201,5 +206,28 @@ crit: Microsoft.AspNetCore.Server.Kestrel[0]
 
 1. `dotnet dev-certs https --clean`
 2. `dotnet dev-certs https --trust`
+
+---
+
+Docker:
+
+- Dockerfile --> Docker Image
+
+push image to docker hub - `docker build -t dotpep/platformservicedotnet .`
+
+- `docker run -p 8080:80 -d dotpep/platformservicedotnet` (-p flag port, mapping) (-d flag detached) (docker hub image)
+
+Commands:
+
+- `docker run` (start new id container)
+- `docker ps` (what containers are in running)
+- `docker stop <container-id>` (stop container by id)
+- `docker start <container-id>` (restart existed container with id)
+- `docker logs -f <container-id>` (check docker logs, with -f flag attached)
+
+A lot usage:
+
+- `docker push <dotpep/platformservicedotnet>`
+- `docker build`
 
 ### Golang
