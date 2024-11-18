@@ -172,7 +172,7 @@ K8s terminology:
 
 API Gateway in K8s:
 
-Pod with Ingress Nginx Controller
+Pod with Ingress Nginx Controller...
 
 **Questions:**
 
@@ -267,3 +267,30 @@ A lot usage:
 - `kubectl apply -f .\platforms-depl.yml` (`cd .\K8s\`)
 - `kubectl get deployments`
 - `kubectl get pods`
+- `kubectl delete deployment <service-deployments-name>`
+- `kubectl delete pod <name>`
+
+---
+
+If we try to delete `platformservice` with logs of web-api, k8s will automatically up it, even if we delete it.
+
+For deletion and stoping you need to delete deployments (when running k8s there will be 2 service container in `docker ps`).
+
+- `kubectl delete deployments platforms-depl`
+
+---
+
+We have service up and running on K8s cluster
+but we have no way of accessing it yet.
+
+We need to create a **Node Port** that will actually give us access to service running in k8s cluster.
+
+- `kubectl apply -f .\platforms-np-srv.yml`
+- `kubectl get services`
+
+---
+
+Naming K8s directory .yml files:
+
+- `platforms-depl.tml` platform service deployment
+- `platforms-np-srv.tml` platform node port service
