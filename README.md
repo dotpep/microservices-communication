@@ -7,7 +7,7 @@
 - Event Driven Architecture
 - SQL and InMemory (Cache) Databases
 - REST API
-- API Gateway
+- API Gateway (Ingress Nginx Controller, Ingress Nginx Load Balancer)
 - gRPC (sync)
 - RabbitMQ (async)
 - Docker
@@ -149,7 +149,36 @@ Endpoint: `http://localhost:5000/api/platforms`
 Docker is ???.
 Docker Container works above OS with Docker Engine (when VM like Virtual Box uses Hypervisor to make new OS top of your Host OS).
 
-Kubernates is Container Orchestrator, 
+Docker Compose is kind of a middle ground between Docker and K8s,
+there is also run up muliple containers, network them together,
+it is good option in development type environment/stage
+but in production-wise K8s is really the option.
+
+Kubernates is Container Orchestrator,
+
+**Kubernates Architecture:**
+
+`/K8s` is production deployment k8s files
+
+K8s terminology:
+
+- Cluster is
+- Node is
+    - Node port (3xxxx:80) 3xxxx is internal, 80 is external
+- Pod is Container Service (like our Platform Service Container) with (80:666)
+- Port mapping is
+    - Cluster IP
+- communcation between K8s
+
+API Gateway in K8s:
+
+Pod with Ingress Nginx Controller
+
+**Questions:**
+
+- API Gateway vs Ingress Controller vs Load Balancer vs Reverse Proxy
+- Kubernates Imperative (Command Line) and Declarative (Config Files)
+- K8s microservices directory structure solution
 
 ## Running Instructions
 
@@ -207,7 +236,9 @@ crit: Microsoft.AspNetCore.Server.Kestrel[0]
 1. `dotnet dev-certs https --clean`
 2. `dotnet dev-certs https --trust`
 
----
+### Golang
+
+### Docker
 
 Docker:
 
@@ -230,4 +261,9 @@ A lot usage:
 - `docker push <dotpep/platformservicedotnet>`
 - `docker build`
 
-### Golang
+### K8s
+
+- `kubectl version`
+- `kubectl apply -f .\platforms-depl.yml` (`cd .\K8s\`)
+- `kubectl get deployments`
+- `kubectl get pods`
