@@ -17,6 +17,23 @@
 
 - [.NET Microservices YT](https://youtu.be/DgVjEo3OGBI?si=SRhBSwyhBf85bbRg)
 
+## TO DO
+
+-
+- Come Up with other microservices for this project
+
+---
+
+**Golang:**
+
+- Transition to Golang Microservices (From DotNET)
+    - How to use Golang PlatformService (instead of Dotnet)
+    - is it needed? need I delete them?
+    - where to store Dotnet service? what is fallback?
+- migrate/convert Dotnet PlatformService to Golang PlatformService (PlatformServiceGo)
+- how to structure Golang project
+- Golang Event-Driven Architecture
+
 ## Demonstrations, Solution Architecture
 
 `System Design and Software/Service Architecuture`
@@ -135,6 +152,15 @@ Endpoint: `http://localhost:5000/api/platforms`
 
 ### DotNET
 
+To start:
+
+`dotnet build`
+`dotnet run`
+
+---
+
+To configure version:
+
 `dotnet --list-sdks`
 `dotnet --version`
 
@@ -158,5 +184,22 @@ change global.json (version to `dotnet --list-sdks` version):
 
 `dotnet add package PackageName -v 5.0.8`
 -v flag is --version
+
+---
+
+to Fix bug:
+
+```bash
+dotnet run
+Building...
+--> Seeding Data...
+crit: Microsoft.AspNetCore.Server.Kestrel[0]
+      Unable to start Kestrel.
+```
+
+[Stackoverflow - Unable to start Kestrel when 'dotnet run'](https://stackoverflow.com/questions/57736568/unable-to-start-kestrel-when-dotnet-run)
+
+1. `dotnet dev-certs https --clean`
+2. `dotnet dev-certs https --trust`
 
 ### Golang
