@@ -36,8 +36,8 @@
 
 ## Services
 
-- PlatformService runs on `5000` and `5001` locally
-- CommandsService runs on `6000` and `6001` locally
+- PlatformService runs on `5000` http and `5001` http locally
+- CommandsService runs on `6000` http and `6001` http locally
 
 ## Demonstrations, Solution Architecture
 
