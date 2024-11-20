@@ -34,6 +34,11 @@
 - how to structure Golang project
 - Golang Event-Driven Architecture
 
+## Services
+
+- PlatformService runs on `5000` and `5001` locally
+- CommandsService runs on `6000` and `6001` locally
+
 ## Demonstrations, Solution Architecture
 
 `System Design and Software/Service Architecuture`
@@ -164,7 +169,7 @@ K8s terminology:
 
 - Cluster is
 - Node is
-    - Node port (3xxxx:80) 3xxxx is internal, 80 is external
+    - Node port (3xxxx:80) 3xxxx is internal, 80 is external (3xxxx will be generated)
 - Pod is Container Service (like our Platform Service Container) with (80:666)
 - Port mapping is
     - Cluster IP
@@ -287,6 +292,8 @@ We need to create a **Node Port** that will actually give us access to service r
 
 - `kubectl apply -f .\platforms-np-srv.yml`
 - `kubectl get services`
+
+Node Port - 3xxxx will be generated with random!
 
 ---
 
