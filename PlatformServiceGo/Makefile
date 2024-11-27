@@ -37,6 +37,7 @@ docker-down:
 docker-remove:
 	@docker-compose down -v
 
+# Get into Bash/Ash, Psql of container
 docker-exec-api:
 	@docker exec -it platformservicego-api-1 ash
 

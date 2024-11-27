@@ -39,6 +39,16 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
+	// Storage (Database)
+	// Initializing database service
+	dbService := database.New()
+
+	// Run seeding logic
+	log.Println("--> Seeding function is being executed, Preperation Data is seeding into DB")
+	utility.SeedData(dbService)
+
+	defer dbService.Close()
+
 	// Server
 	log.Println("--> Starting server...")
 	server := config.NewServer()
@@ -57,13 +67,4 @@ func main() {
 	// Wait for the graceful shutdown to complete
 	<-done
 	log.Println("Graceful shutdown complete.")
-
-	// Storage (Database)
-	// Initializing database service
-	dbService := database.New()
-
-	// Run seeding logic
-	utility.SeedData(dbService)
-
-	defer dbService.Close()
 }

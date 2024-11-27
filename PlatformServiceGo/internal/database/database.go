@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"database/sql"
+	"exampleFirst/internal/models"
 	"fmt"
 	"log"
 	"os"
@@ -80,7 +81,9 @@ func New() Service {
 	}
 
 	// TODO: Auto migrate models
-	// dbInstance.db.AutoMigrate(&MyModel{})
+	dbInstance.db.AutoMigrate(
+		&models.Platform{},
+	)
 
 	return dbInstance
 }

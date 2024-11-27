@@ -15,12 +15,12 @@ func SeedData(dbService database.Service) {
 
 	err := db.Model(&models.Platform{}).Count(&count).Error
 	if err != nil {
-		log.Println("--> Failed to check platform count:", err)
+		log.Println("---> Failed to check platform count:", err)
 		return
 	}
 
 	if count == 0 {
-		fmt.Println("--> Seeding Data...")
+		fmt.Println("---> Seeding Data...")
 
 		platforms := []models.Platform{
 			{Name: "Dot Net", Publisher: "Microsoft", Cost: "Free"},
@@ -29,11 +29,11 @@ func SeedData(dbService database.Service) {
 		}
 
 		if err := db.Create(&platforms).Error; err != nil {
-			fmt.Println("--> Failed to seed data:", err)
+			fmt.Println("---> Failed to seed data:", err)
 		} else {
-			fmt.Println("--> Data successfully seeded")
+			fmt.Println("---> Data successfully seeded")
 		}
 	} else {
-		log.Println("--> Database already has data")
+		log.Println("---> Database already has data")
 	}
 }
