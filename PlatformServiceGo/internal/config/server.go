@@ -27,7 +27,8 @@ func NewServer() *http.Server {
 		db: database.New(),
 	}
 
-	router := route.NewRouter()
+	db := database.New()
+	router := route.NewRouter(db)
 
 	// Declare Server config
 	server := &http.Server{

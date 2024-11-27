@@ -10,6 +10,8 @@ import (
 	"time"
 
 	"exampleFirst/internal/config"
+	"exampleFirst/internal/database"
+	"exampleFirst/internal/utility"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
@@ -37,6 +39,8 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
+	// Server
+	log.Println("--> Starting server...")
 	server := config.NewServer()
 
 	// Create a done channel to signal when the shutdown is complete
@@ -53,4 +57,13 @@ func main() {
 	// Wait for the graceful shutdown to complete
 	<-done
 	log.Println("Graceful shutdown complete.")
+
+	// Storage (Database)
+	// Initializing database service
+	dbService := database.New()
+
+	// Run seeding logic
+	utility.SeedData(dbService)
+
+	defer dbService.Close()
 }

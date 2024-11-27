@@ -37,6 +37,12 @@ docker-down:
 docker-remove:
 	@docker-compose down -v
 
+docker-exec-api:
+	@docker exec -it platformservicego-api-1 ash
+
+docker-exec-psql:
+	@docker exec -it platformservicego-postgresdb-1 psql -U devdotpep -d PlatformServiceDB
+
 # Test the application
 test:
 	@echo "Testing..."

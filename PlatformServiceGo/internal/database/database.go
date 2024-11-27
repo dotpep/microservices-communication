@@ -11,6 +11,8 @@ import (
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/joho/godotenv/autoload"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // Service represents a service that interacts with a database.
@@ -22,10 +24,12 @@ type Service interface {
 	// Close terminates the database connection.
 	// It returns an error if the connection cannot be closed.
 	Close() error
+	GetDB() *gorm.DB
 }
 
 type service struct {
-	db *sql.DB
+	db    *gorm.DB
+	sqlDB *sql.DB
 }
 
 var (
@@ -43,14 +47,41 @@ func New() Service {
 	if dbInstance != nil {
 		return dbInstance
 	}
-	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s", username, password, host, port, database, schema)
-	db, err := sql.Open("pgx", connStr)
+
+	// Build connection string
+	connStr := fmt.Sprintf(
+		"postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s",
+		username, password, host, port, database, schema,
+	)
+
+	// Sql connection
+	//sqlDb, err := sql.Open("pgx", connStr)
+
+	// Open GORM connection
+	//gormDB, err := gorm.Open(postgres.New(postgres.Config{
+	//	Conn: sqlDB,
+	//}), &gorm.Config{})
+
+	gormDB, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to connect to database: %v", err)
 	}
+
+	// TODO: Fix crutches in this code, cut sqlDb and also Health() function implementation with GORM, to check database connection health
+	sqlDB, err := gormDB.DB()
+	if err != nil {
+		log.Fatalf("failed to get sql.DB: %v", err)
+	}
+
+	// Setup database instance settings
 	dbInstance = &service{
-		db: db,
+		db:    gormDB,
+		sqlDB: sqlDB,
 	}
+
+	// TODO: Auto migrate models
+	// dbInstance.db.AutoMigrate(&MyModel{})
+
 	return dbInstance
 }
 
@@ -63,7 +94,7 @@ func (s *service) Health() map[string]string {
 	stats := make(map[string]string)
 
 	// Ping the database
-	err := s.db.PingContext(ctx)
+	err := s.sqlDB.PingContext(ctx)
 	if err != nil {
 		stats["status"] = "down"
 		stats["error"] = fmt.Sprintf("db down: %v", err)
@@ -76,7 +107,7 @@ func (s *service) Health() map[string]string {
 	stats["message"] = "It's healthy"
 
 	// Get database stats (like open connections, in use, idle, etc.)
-	dbStats := s.db.Stats()
+	dbStats := s.sqlDB.Stats()
 	stats["open_connections"] = strconv.Itoa(dbStats.OpenConnections)
 	stats["in_use"] = strconv.Itoa(dbStats.InUse)
 	stats["idle"] = strconv.Itoa(dbStats.Idle)
@@ -111,5 +142,10 @@ func (s *service) Health() map[string]string {
 // If an error occurs while closing the connection, it returns the error.
 func (s *service) Close() error {
 	log.Printf("Disconnected from database: %s", database)
-	return s.db.Close()
+	return s.sqlDB.Close()
+}
+
+// GetDB returns the underlying GORM DB instance
+func (s *service) GetDB() *gorm.DB {
+	return s.db
 }

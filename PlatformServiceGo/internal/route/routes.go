@@ -14,16 +14,18 @@ type Router struct {
 	db database.Service
 }
 
-func NewRouter() *Router {
-	return &Router{}
+func NewRouter(db database.Service) *Router {
+	return &Router{db: db}
 }
 
 func (ro *Router) RegisterRoutes() http.Handler {
 	router := chi.NewRouter()
 	router.Use(middleware.Logger)
 
-	router.Get("/", ro.HelloWorldHandler)
+	// Initialize handlers
 
+	// Routes
+	router.Get("/", ro.HelloWorldHandler)
 	router.Get("/health", ro.healthHandler)
 
 	return router
