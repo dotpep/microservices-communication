@@ -5,7 +5,7 @@ import (
 	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/models"
 )
 
-func DatabasePlatformToPlatform(dbPlat models.Platform) entities.Platform {
+func DatabaseOnePlatformToOnePlatform(dbPlat models.Platform) entities.Platform {
 	return entities.Platform{
 		ID:        dbPlat.ID,
 		Name:      dbPlat.Name,
@@ -14,10 +14,10 @@ func DatabasePlatformToPlatform(dbPlat models.Platform) entities.Platform {
 	}
 }
 
-func DatabasePlatformsToPlatforms(dbPlatforms []models.Platform) []entities.Platform {
+func DatabaseListPlatformsToListPlatforms(dbPlatforms []models.Platform) []entities.Platform {
 	platforms := []entities.Platform{}
 	for _, dbPlat := range dbPlatforms {
-		platforms = append(platforms, DatabasePlatformToPlatform(dbPlat))
+		platforms = append(platforms, DatabaseOnePlatformToOnePlatform(dbPlat))
 	}
 
 	return platforms

@@ -36,9 +36,12 @@ func (r *Router) RegisterRoutes() http.Handler {
 
 	// Routes
 	router.Get("/", r.appHandler.HelloWorldHandler)
-	router.Get("/health", r.appHandler.HealthHandler)
+	router.Get("/health", r.appHandler.DatabaseHealthHandler)
+	router.Get("/hello/{name}", r.appHandler.SayHelloToNameHandler)
 
-	router.Get("/platforms", r.platformHandler.GetAllPlatforms)
+	router.Post("/platforms", r.platformHandler.CreatePlatformHandler)
+	router.Get("/platforms", r.platformHandler.GetAllPlatformsHandler)
+	router.Get("/platforms/{platformID}", r.platformHandler.GetPlatformByIDHandler)
 
 	return router
 }

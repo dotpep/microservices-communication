@@ -26,7 +26,10 @@ type Service interface {
 	// Close terminates the database connection.
 	// It returns an error if the connection cannot be closed.
 	Close() error
+
+	// GORM Related
 	GetDB() *gorm.DB
+	RunMigrations()
 }
 
 type service struct {
@@ -56,14 +59,6 @@ func New() Service {
 		username, password, host, port, database, schema,
 	)
 
-	// Sql connection
-	//sqlDb, err := sql.Open("pgx", connStr)
-
-	// Open GORM connection
-	//gormDB, err := gorm.Open(postgres.New(postgres.Config{
-	//	Conn: sqlDB,
-	//}), &gorm.Config{})
-
 	gormDB, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("failed to connect to database: %v", err)
@@ -81,12 +76,24 @@ func New() Service {
 		sqlDB: sqlDB,
 	}
 
-	// TODO: Auto migrate models (FIX IT!) seperate it
-	dbInstance.db.AutoMigrate(
-		&models.Platform{},
-	)
-
 	return dbInstance
+}
+
+// RunMigrations run auto migration for given models of GORM
+func (s *service) RunMigrations() {
+	log.Println("---> Running database migrations (GORM Auto)...")
+	if err := s.db.AutoMigrate(
+		// Add/List models here:
+		&models.Platform{},
+	); err != nil {
+		log.Fatalf("Failed to run migrations: %v\n", err)
+	}
+	log.Println("---> Database migrations completed.")
+}
+
+// GetDB returns the underlying GORM DB instance
+func (s *service) GetDB() *gorm.DB {
+	return s.db
 }
 
 // Health checks the health of the database connection by pinging the database.
@@ -147,9 +154,4 @@ func (s *service) Health() map[string]string {
 func (s *service) Close() error {
 	log.Printf("Disconnected from database: %s", database)
 	return s.sqlDB.Close()
-}
-
-// GetDB returns the underlying GORM DB instance
-func (s *service) GetDB() *gorm.DB {
-	return s.db
 }

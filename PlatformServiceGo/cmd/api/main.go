@@ -44,16 +44,17 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 func main() {
 	// Initialize dependencies
 	// Initializing database service
+	log.Println("--> Connecting to database...")
 	dbService := database.New()
 	defer dbService.Close()
 
+	// TODO: provide migrations to top level dir /migrations
 	// Run migrations
-	// TODO: migrations right here not in NewDatabase()
-	// also provide migrations to top level dir /migrations
-	//runMigrations(dbService)
+	// you need to add and list your models of GORM inside of RunMigrations() logic
+	dbService.RunMigrations()
 
 	// Seed initial data
-	log.Println("--> Seeding data into database")
+	log.Println("--> Seeding data to database...")
 	utility.SeedPrepData(dbService)
 
 	// Initialize repositories and handlers
