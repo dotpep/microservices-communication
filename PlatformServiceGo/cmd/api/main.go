@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"exampleFirst/internal/config"
-	"exampleFirst/internal/database"
-	"exampleFirst/internal/utility"
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/config"
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/utility"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

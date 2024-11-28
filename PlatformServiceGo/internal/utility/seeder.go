@@ -1,10 +1,11 @@
 package utility
 
 import (
-	"exampleFirst/internal/database"
-	"exampleFirst/internal/models"
 	"fmt"
 	"log"
+
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/models"
 )
 
 // SeedPrepData seeds the database with initial data if it's empty.

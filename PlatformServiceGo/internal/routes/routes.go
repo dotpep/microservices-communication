@@ -2,9 +2,10 @@ package routes
 
 import (
 	"encoding/json"
-	"exampleFirst/internal/database"
 	"log"
 	"net/http"
+
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"

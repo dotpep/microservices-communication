@@ -3,12 +3,13 @@ package database
 import (
 	"context"
 	"database/sql"
-	"exampleFirst/internal/models"
 	"fmt"
 	"log"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/models"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
 	_ "github.com/joho/godotenv/autoload"

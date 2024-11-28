@@ -1,4 +1,4 @@
-module github.com/dotpep/microservices-communication/PlatformServiceGo
+module exampleFirst
 
 go 1.22
 

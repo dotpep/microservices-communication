@@ -3,7 +3,8 @@ package repositories
 import (
 	"context"
 	"errors"
-	"exampleFirst/internal/models"
+
+	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/models"
 
 	"gorm.io/gorm"
 )
