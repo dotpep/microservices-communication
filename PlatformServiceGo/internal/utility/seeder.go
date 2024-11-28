@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/models"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/models"
 )
 
 // SeedPrepData seeds the database with initial data if it's empty.

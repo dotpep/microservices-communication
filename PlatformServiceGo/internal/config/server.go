@@ -9,8 +9,8 @@ import (
 
 	_ "github.com/joho/godotenv/autoload"
 
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/routes"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/routes"
 )
 
 type Server struct {

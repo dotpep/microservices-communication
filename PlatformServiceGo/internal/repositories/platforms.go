@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/models"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/models"
 
 	"gorm.io/gorm"
 )

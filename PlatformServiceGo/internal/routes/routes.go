@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/dotpep/microservices-communication/PlatformServiceGointernal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/database"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
