@@ -81,7 +81,7 @@ func New() Service {
 		sqlDB: sqlDB,
 	}
 
-	// TODO: Auto migrate models
+	// TODO: Auto migrate models (FIX IT!) seperate it
 	dbInstance.db.AutoMigrate(
 		&models.Platform{},
 	)

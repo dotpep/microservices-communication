@@ -11,6 +11,9 @@ import (
 
 	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/config"
 	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/database"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/handlers"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/repositories"
+	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/routes"
 	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/utility"
 )
 
@@ -39,19 +42,35 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 }
 
 func main() {
-	// Storage (Database)
+	// Initialize dependencies
 	// Initializing database service
 	dbService := database.New()
-
-	// Run seeding logic
-	log.Println("--> Seeding function is being executed, Preperation Data is seeding into DB")
-	utility.SeedPrepData(dbService)
-
 	defer dbService.Close()
 
-	// Server
+	// Run migrations
+	// TODO: migrations right here not in NewDatabase()
+	// also provide migrations to top level dir /migrations
+	//runMigrations(dbService)
+
+	// Seed initial data
+	log.Println("--> Seeding data into database")
+	utility.SeedPrepData(dbService)
+
+	// Initialize repositories and handlers
+	platformRepo := repositories.NewPlatformRepo(dbService.GetDB())
+	platformHandler := handlers.NewPlatformHandler(platformRepo)
+
+	appHandler := handlers.NewAppHandler(dbService)
+
+	// Initialize router
+	router := routes.NewRouter(
+		platformHandler,
+		appHandler,
+	)
+
+	// Start HTPP Server
 	log.Println("--> Starting server...")
-	server := config.NewServer()
+	server := config.NewServer(router)
 
 	// Create a done channel to signal when the shutdown is complete
 	done := make(chan bool, 1)

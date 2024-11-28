@@ -10,7 +10,6 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/database"
-	"github.com/dotpep/microservices-communication/PlatformServiceGo/internal/routes"
 )
 
 type Server struct {
@@ -19,25 +18,14 @@ type Server struct {
 	db database.Service
 }
 
-func NewServer() *http.Server {
+func NewServer(handler http.Handler) *http.Server {
 	port, _ := strconv.Atoi(os.Getenv("API_PORT"))
-	NewServer := &Server{
-		port: port,
 
-		db: database.New(),
-	}
-
-	db := database.New()
-	router := routes.NewRouter(db)
-
-	// Declare Server config
-	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      router.RegisterRoutes(),
+	return &http.Server{
+		Addr:         fmt.Sprintf(":%d", port),
+		Handler:      handler,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,
 	}
-
-	return server
 }
