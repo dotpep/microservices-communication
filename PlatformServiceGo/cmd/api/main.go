@@ -45,7 +45,7 @@ func main() {
 
 	// Run seeding logic
 	log.Println("--> Seeding function is being executed, Preperation Data is seeding into DB")
-	utility.SeedData(dbService)
+	utility.SeedPrepData(dbService)
 
 	defer dbService.Close()
 

@@ -1,10 +1,20 @@
 # Platform Service in Golang
 
+## Tech Stack
+
+- Golang
+- Go-chi
+- GORM
+- Postgres
+- Docker
+- Makefile
+
 ## TODO
 
 - [ ] restructure project
 - [ ] rename package and project solution, go mod of `exampleFirst`
 - [ ] add and use GORM
+- [ ] validate of GORM model when encoding `json` with `validate` like in Dotnet Data Annotations and Pydantic Schema in Python (platforms need `required`)
 - [ ] add middleware logger and error levels, proper error handling
 - [ ] be more clear storage (database) postgres (strcuts and interfaces) instead of `Service` make it concise/clear by `DbService` interface, `dbService` struct
 - [ ] golang air (autoreload) air vs docker wathc (is it possible to use air in production in docker)
@@ -19,3 +29,5 @@
 - directory naming (plural or not)???
 - gorm vs raw sql in golang projects
 - golang struct vs database model json struct in project???
+- air vs docker compose watch
+- air in production???

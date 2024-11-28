@@ -10,7 +10,7 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"exampleFirst/internal/database"
-	"exampleFirst/internal/route"
+	"exampleFirst/internal/routes"
 )
 
 type Server struct {
@@ -28,7 +28,7 @@ func NewServer() *http.Server {
 	}
 
 	db := database.New()
-	router := route.NewRouter(db)
+	router := routes.NewRouter(db)
 
 	// Declare Server config
 	server := &http.Server{

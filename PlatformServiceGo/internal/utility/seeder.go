@@ -7,8 +7,8 @@ import (
 	"log"
 )
 
-// SeedData seeds the database with initial data if it's empty.
-func SeedData(dbService database.Service) {
+// SeedPrepData seeds the database with initial data if it's empty.
+func SeedPrepData(dbService database.Service) {
 	db := dbService.GetDB()
 
 	var count int64
