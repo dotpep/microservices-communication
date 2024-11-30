@@ -379,3 +379,25 @@ Try to Ping this endpoint:
 - `http://microcomm.com/api/platforms`
 
 ---
+
+Creating Database Storage Pod in K8s cluster:
+
+- `kubectl get storageclass`
+
+Three concepts of Storage K8s:
+
+1. Persistent Volume Claim
+2. Persistent Volume
+3. Storage Class
+
+`local-pvc.yml`:
+
+- `kubectl apply -f .\local-pvc.yml`
+- `kubectl get pvc`
+
+---
+
+Creating K8s secrets:
+
+- `kubectl create secret generic mssql --from-literal=SA_PASSWORD="pas55w0rd!"`
+- `kubectl create secret generic <mssql-name> --from-literal=<SA_PASSWORD-key>="<pas55w0rd!-value>"`
