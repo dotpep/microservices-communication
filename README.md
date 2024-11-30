@@ -326,3 +326,56 @@ Because of changes and creating new file, you need to build and push Docker Imag
 - `kubectl get deployments`
 - `kubectl rollout restart deployment platforms-depl`
 - `kubectl logs <pod> -f`
+
+---
+
+Setting Up - Ingress Nginx Controller (API Gateway)
+
+links:
+
+- [github.com/kubernetes/ingress-nginx](https://github.com/kubernetes/ingress-nginx)
+- [kubernetes.github.io/ingress-nginx/deploy/#docker-desktop](https://kubernetes.github.io/ingress-nginx/deploy/#docker-desktop)
+- [raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.0-beta.0/deploy/static/provider/aws/deploy.yaml](https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.0-beta.0/deploy/static/provider/aws/deploy.yaml)
+
+Command:
+
+- `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.0-beta.0/deploy/static/provider/aws/deploy.yaml` (in `kubernetes.github.io/ingress-nginx/deploy/#docker-desktop` link)
+
+Additional:
+
+- `kubectl get namespace`
+- `kubectl get deployments --namespace=ingress-nginx` shows name:`ingress-nginx-controller`
+- `kubectl get pods --namespace=ingress-nginx`
+- `kubectl logs <pod> --namespace=ingress-nginx -f`
+- `kubectl get services --namespace=ingress-nginx` shows name:`ingress-nginx-controller` and type:`LoadBalancer`
+
+---
+
+`ingress-srv.yml`:
+
+- rules: - host: `microcomm.com`
+
+Steps:
+
+- `cd C:\Windows\System32\drivers\etc`
+- `ls` shows files like `hosts`, `networks`, `protocol`, `services` ...
+- `vim .\hosts` and add `127.0.0.1 microcomm.com`
+- `cat .\hosts` ensure that you added it correctly in the end of file
+
+Applying ingress-srv.yml:
+
+- `kubectl apply -f .\ingress-srv.yml`
+
+```bash
+Warning: annotation "kubernetes.io/ingress.class" is deprecated, please use 'spec.ingressClassName' instead
+```
+
+Solution for warning:
+
+- [kubernetes ingress service annotations, kubernetes.io/ingress.class annotation is officially deprecated:](https://stackoverflow.com/questions/64262770/kubernetes-ingress-service-annotations)
+
+Try to Ping this endpoint:
+
+- `http://microcomm.com/api/platforms`
+
+---
