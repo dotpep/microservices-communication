@@ -401,3 +401,45 @@ Creating K8s secrets:
 
 - `kubectl create secret generic mssql --from-literal=SA_PASSWORD="pas55w0rd!"`
 - `kubectl create secret generic <mssql-name> --from-literal=<SA_PASSWORD-key>="<pas55w0rd!-value>"`
+
+---
+
+`mssql-plat-depl.yml`:
+
+```yml
+...
+          env:
+          - name: MSSQL_PID
+            value: "Express"
+          - name: ACCEPT_EULA
+            value: "Y"
+          - name: SA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: <mssql-name>
+                key: <SA_PASSWORD-key>
+```
+
+1. Deployment `msql`
+2. Service `mssql-clusterip-srv` type:`ClusterIP`
+3. Service `mssql-loadbalancer` type:`LoadBalancer`
+
+- `kubectl apply -f .\mssql-plat-depl.yml`
+- `kubectl get services`
+- `kubectl get pods`
+
+---
+
+Connection to MsSQL (Microsoft SQL Server)
+
+SQLTools and SQLTools Microsoft SQL Server driver (VS Code extentions to connect) (search: `@tag:sqltools-driver mssql` for driver) (SQLTools and MsSQL driver by Matheus Teixeira):
+
+Connection string:
+```txt
+Server=localhost,1433;Database=Master;User Id=SA;Password=pas55w0rd!
+```
+
+Command:
+
+- `docker ps`
+- `docker exec -it <fa8cb70ec39f-CONTAINER-ID-or-Name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa`
