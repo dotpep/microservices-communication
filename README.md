@@ -36,8 +36,8 @@
 
 ## Services
 
-- PlatformService runs on `5000` http and `5001` http locally
-- CommandsService runs on `6000` http and `6001` http locally
+- PlatformService runs on `5000` http and `5001` https locally
+- CommandsService runs on `6000` http and `6001` https locally
 
 ## Demonstrations, Solution Architecture
 
@@ -263,7 +263,7 @@ Commands:
 
 A lot usage:
 
-- `docker push <dotpep/platformservicedotnet>`
+- `docker push dotpep/platformservicedotnet`
 - `docker build`
 
 ### K8s
@@ -301,3 +301,28 @@ Naming K8s directory .yml files:
 
 - `platforms-depl.tml` platform service deployment
 - `platforms-np-srv.tml` platform node port service
+
+---
+
+Second Service (CommandService):
+
+- `docker build -t dotpep/commandservicedotnet .`
+- `docker run -p 8080:80 dotpep/commandservicedotnet`
+
+Make `appsettings.Production.json` in PlatformService that sends HttpCommandDataClient to CommandsService:
+
+```json
+{
+    "CommandService": "http://commands-clusterip-srv:80/api/c/platforms"
+}
+```
+
+- `commands-clusterip-srv:80` is service host in /K8s/commands-depl.yml conf file `ClusterIP` second section
+
+Because of changes and creating new file, you need to build and push Docker Image to Hub: `docker build -t dotpep/platformservicedotnet .` and `docker push dotpep/platformservicedotnet`
+
+---
+
+- `kubectl get deployments`
+- `kubectl rollout restart deployment platforms-depl`
+- `kubectl logs <pod> -f`
