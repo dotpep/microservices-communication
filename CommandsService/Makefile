@@ -1,3 +1,19 @@
+depl-build:
+	@echo "Building Docker Image to dotpep/commandservicedotnet..."
+	
+	@docker build -t dotpep/commandservicedotnet .
+
+depl-push:
+	@echo "Pushing Docker Image to dotpep/commandservicedotnet..."
+	
+	@docker push dotpep/commandservicedotnet
+
+depl-run:
+	@echo "Running Docker Image in Localhost..."
+	
+	@docker run -p 8080:80 dotpep/commandservicedotnet
+
+
 version:
 	@echo "Current Version of Dotnet:"
 	

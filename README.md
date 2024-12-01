@@ -329,6 +329,10 @@ Because of changes and creating new file, you need to build and push Docker Imag
 
 ---
 
+- `kubectl apply -f .\commands-depl.yml`
+
+---
+
 Setting Up - Ingress Nginx Controller (API Gateway)
 
 links:
@@ -443,3 +447,139 @@ Command:
 
 - `docker ps`
 - `docker exec -it <fa8cb70ec39f-CONTAINER-ID-or-Name> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa`
+
+MsSQL type commands:
+
+1. select name from sys.databases;
+2. go
+
+- quit
+
+---
+
+`/PlatformService/appsettings.Production.json`:
+
+- Do not use user as default `SA`/`sa` in `User Id=SA` in Production staging configuration, connection!
+
+```json
+{
+    "CommandService": "http://commands-clusterip-srv:80/api/c/platforms",
+    "ConnectionStrings":
+    {
+        "PlatformsConn": "Server=mssql-clusterip-srv,1433;Initial Catalog=platformsdb;User Id=SA;Password=pas55w0rd!;"
+    }
+}
+```
+
+---
+
+Migrations of SQLServer in Production and InMemory Seeding data in Development
+
+- `dotnet ef migrations add initialmigration`
+
+If you get error with `file was not found.` e.g. for `dotnet ef`:
+
+- `dotnet tool install --global dotnet-ef --version 5.*`
+
+Link: [Command dotnet ef not found - Stackoverflow](https://stackoverflow.com/questions/57066856/command-dotnet-ef-not-found)
+
+InMemory Database do not support migrations and we need to do some trick!
+(We are using InMemory DB for Development and SQL Server as for Production)
+
+in `PlatformService/Startup.cs` - (comment it when applying Migrations and uncomment when we done with this, and use it for Development):
+
+```cs
+            // Database
+            //if (_env.IsProduction())
+            //{
+                Console.WriteLine("--> Using SqlServer Db");
+                services.AddDbContext<AppDbContext>(opt =>
+                    opt.UseSqlServer(Configuration.GetConnectionString("PlatformsConn"))
+                );
+            //}
+            //else
+            //{
+            //    Console.WriteLine("--> Using InMem Db");
+            //    services.AddDbContext<AppDbContext>(opt =>
+            //        opt.UseInMemoryDatabase("InMem")
+            //    );
+            //}
+```
+
+and also:
+
+```cs
+            // Preperation DB
+            //PrepDb.PrepPopulation(app, env.IsProduction());
+```
+
+it will look like after this command (`dotnet ef migrations add initialmigration`):
+
+```bash
+Build started...
+Build succeeded.
+--> Using SqlServer Db
+--> CommandService Endpoint http://localhost:6000/api/c/platforms
+Done. To undo this action, use 'ef migrations remove'
+```
+
+- make docker build for image and push it
+- and kubectl restart of platforms-depl deployment
+
+Check with:
+
+- `docker ps` find mssql Container_ID
+- `docker exec -it <e9dd6791525e-Container_ID> /opt/mssql-tools/bin/sqlcmd -S localhost -U sa`
+- in container Mssql sqlcmd: `select name from sys.databases;`
+- and write `go`
+- this will show databases in sys and also our migrated databases called `platformsdb`
+
+Additional check in Container MsSQL DB:
+
+- `USE platformsdb;`
+- `go`
+- `SELECT * FROM Platforms;`
+- `go`
+
+---
+
+Error Management and Kill Bad Deployment:
+
+- `kubectl delete deployment platforms-depl`
+
+## Step by step
+
+### Development (Localhost)
+
+### Production (K8s Cluster)
+
+1. `kubectl apply -f .\platforms-depl.yml`
+2. `kubectl apply -f .\platforms-np-srv.yml`
+3. `kubectl apply -f .\commands-depl.yml`
+4. `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.0-beta.0/deploy/static/provider/aws/deploy.yaml`
+5. `kubectl apply -f .\ingress-srv.yml`
+6. `kubectl apply -f .\local-pvc.yml`
+7. `kubectl apply -f .\mssql-plat-depl.yml`
+
+---
+
+Checking:
+
+1. `kubectl get deployments`
+2. `kubectl get pods`
+3. `kubectl get services`
+4. `kubectl get pvc`
+5. `kubectl get namespace`
+6. `kubectl get services --namespace=ingress-nginx`
+
+---
+
+Updating Code:
+
+`platformservicedotnet` Or `commandservicedotnet`
+
+- `docker build -t dotpep/platformservicedotnet .`
+- `docker run -p 8080:80 dotpep/platformservicedotnet`
+- `docker push dotpep/platformservicedotnet`
+
+## Makefile
