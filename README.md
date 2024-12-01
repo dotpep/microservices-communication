@@ -12,6 +12,7 @@
 - RabbitMQ (async)
 - Docker
 - K8s
+- Event Bus
 
 **SRC's:**
 
@@ -19,8 +20,10 @@
 
 ## TO DO
 
--
 - Come Up with other microservices for this project
+- [ ] Database ER-D Schemas
+- [ ] API Documentation (Swagger/OpenAPI)
+- [ ] Architectural Solution/Microservices Communication (images of Schemas...)
 
 ---
 
@@ -36,14 +39,54 @@
 
 ## Services
 
-- PlatformService runs on `5000` http and `5001` https locally
-- CommandsService runs on `6000` http and `6001` https locally
+- PlatformService
+- CommandsService
+
+Services Response Example:
+
+```json
+```
 
 ## Demonstrations, Solution Architecture
 
 `System Design and Software/Service Architecuture`
 
 Schemas, Diagrams, UMLs, OpenAPI/Swagger endpoints docs img's:
+
+## Documentation
+
+### API Endpoints (Dotnet)
+
+**PlatformService:**
+
+- GET: `/api/platforms` Get Lists of All Platforms
+- GET: `/api/platforms/1` Get Specific One Platform
+- POST: `/api/platforms/` Create Platform
+
+---
+
+**CommandsService:**
+
+- POST: `/api/c/platforms/` Test Inbound Connection (to PlatformService)
+
+- GET: `/api/c/platforms` Get All Platforms
+- GET: `/api/c/platforms/{platformId}/commands` Get All Commands for a Platform
+- GET: `/api/c/platforms/{platformId}/commands/{commandId}` Get a Specific Command for a Platform
+- POST: `/api/c/platforms/{platformId}/commands/` Create a Command for a Platform
+
+### Database Entities/Schemas (Dotnet)
+
+**PlatformDatabase:**
+
+- Platform
+    - Id
+    - Name
+    - Publisher
+    - Cost
+
+---
+
+**CommandsDatabase:**
 
 ## Architecture
 
@@ -550,6 +593,9 @@ Error Management and Kill Bad Deployment:
 ## Step by step
 
 ### Development (Localhost)
+
+- PlatformService runs on `5000` http and `5001` https locally
+- CommandsService runs on `6000` http and `6001` https locally
 
 ### Production (K8s Cluster)
 
