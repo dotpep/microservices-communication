@@ -187,9 +187,14 @@ Endpoint: `http://localhost:5000/api/platforms`
 
 **REST API:**
 
+Uses JSON in response, Have endpoints or URI's.
+Works under HTTP (TCP) and have Header, Body, HTTP Status code and Use GET, POST, PUT, PATCH and DELETE HTTP methods.
+
 ---
 
 **HTTP:**
+
+Client requests to REST API.
 
 ---
 
@@ -199,13 +204,70 @@ Endpoint: `http://localhost:5000/api/platforms`
 
 **API Gateway:**
 
+Ingress Nginx Controller and Load Balancer in K8s cluster.
+
 ---
 
-**RabbitMQ:**
+**RabbitMQ (Message Bus) Architecture:**
+
+`PlatformService` will `Publish` a **message** onto in **RabbitMQ Message Bus**,
+and it doesn't care who is **listening** for those **messages** it's just putting
+the information out there, it might be one service, or it might me 100 services, might be none,
+doesn't matter it doesn't care,
+and then on the `CommandService` side, we are going to `Subscribe` for those **events**.
+
+**RabbitMQ Overview:**
+
+RabbitMQ is Message Bus/Message Broker with Queue/Buffer, LIFO, Publisher/Subscriber or Producer/Consumer of Events, Tasks, Messages - Asyncronously.
+
+- A Message Broker - it accepts and forwards messages.
+- Messages are sent by Producers (or Publishers)
+- Messages are received by Consumers (or Subscribers)
+- Messages are stored on Queues (essentially a message buffer) (messages can be stored in the queue, so it has some degree of persistence, we're not going to be using that in our solution, so if our message bus crashes then we use or lose all our messages, but in production type environment you wouldn't do that you would allow messages to persist in the event of any failures)
+- Exchanges can be used to add a degree of "routing" functionality (we're going to be using an exchage, but going to be routing)
+- RabbitMQ Uses - Advanced Message Queuing Protocol (AMQP) and others
+
+Idea: Messangers are published onto the queue if your services are overwhelmed and can't actually service those requests the message broker acts as a buffer for those messages and then as and when you bring more services online they kind of chew through the messages on the queue.
+
+**Exchanges in RabbitMQ:**
+
+4 Types of Exchange:
+
+- Direct Exchange
+- Fanout Exchange (we're going to use)
+- Topic Exchange
+- Header Exchange
+
+**Direct Exchange:**
+
+> Service 1 | Message Broker | Service 2
+
+`Publusher (Publish RK="somekey") --> Exchange (Routes to: "somekey") -> Queue ||| --> (Consume) Consumer`
+
+- Delivers Messages to queues based on a routing key
+- Ideal for "direct" or unicast messaging
+
+**Fanout Exchange:**
+
+> Service 1 | Message Broker | Service 2
+
+`Publusher (Publish) --> Exchange -> Queue 1 |||, Queue 2 ||| --> (Consume) Consumer 1, (Consume) Consumer 2, (Consume) Consumer 3`
+
+- Delivers Messages to all Queues that are bound to the exchange
+- It ignores the routing key
+- Ideal for broadcas messages
+
+Doesn't care who is listening just put messages to Queue.
+
+**RabbitMQ in K8s:**
+
+- K8s RabbitMQ .yml file configuration is not a Production Quality or Production Class deployment.
 
 ---
 
 **Docker and K8s:**
+
+**Docker Overview:**
 
 Docker is ???.
 Docker Container works above OS with Docker Engine (when VM like Virtual Box uses Hypervisor to make new OS top of your Host OS).
@@ -215,7 +277,9 @@ there is also run up muliple containers, network them together,
 it is good option in development type environment/stage
 but in production-wise K8s is really the option.
 
-Kubernates is Container Orchestrator,
+**Kubernates Overview:**
+
+Kubernates is Container Orchestrator, ...
 
 **Kubernates Architecture:**
 
@@ -602,6 +666,21 @@ Additional check in Container MsSQL DB:
 Error Management and Kill Bad Deployment:
 
 - `kubectl delete deployment platforms-depl`
+
+---
+
+RabbitMQ in K8s:
+
+- `kubectl apply -f .\rabbitmq-depl.yml`
+- `kubectl get deployments`, `kubectl get pods`
+- `kubectl get services` show LoadBalancer and ClusterIP of rabbitmq
+- to see logs: `kubectl get pods` or `docker ps` get Container_ID and `kubectl logs <pod-name> -f` or `docker logs <container-id> -f`
+- Go to: `http://localhost:15672/` for Management Interface
+
+RabbitMQ Management Interface Default Login Credentials:
+
+- username: `guest`
+- password: `guest`
 
 ## Step by step
 
