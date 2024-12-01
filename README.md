@@ -88,6 +88,19 @@ Schemas, Diagrams, UMLs, OpenAPI/Swagger endpoints docs img's:
 
 **CommandsDatabase:**
 
+- Command
+    - Id
+    - HowTo
+    - CommandLine
+    - PlatformId
+    - Platform (obj)
+
+- Platform
+    - Id
+    - ExternalId
+    - Name
+    - Commands (obj)
+
 ## Architecture
 
 ### Event Driven Architecture

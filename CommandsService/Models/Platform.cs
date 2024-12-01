@@ -11,7 +11,7 @@ namespace CommandsService.Models
 
         // PlatformService DB Entity, Primary Key
         [Required]
-        public string ExternalID { get; set; }
+        public string ExternalId { get; set; }
 
         [Required]
         public string Name { get; set; }
