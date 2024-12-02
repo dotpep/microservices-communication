@@ -8,6 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CommandsService.Controllers
 {
+    // this is a Controller for Command for Platform
+    // TODO: rename it to CommandsPlatformController and Implement actuall CommandContoller
+        // with [Route("api/c/[controller]")]
+        // to GetAllCommands with platformId field
+    // and also
+    // TODO: refactor endpoint of service `api/c/platforms/` (cut api/c/, or change to proper name)
     [Route("api/c/platforms/{platformId}/[controller]")]
     [ApiController]
     public class CommandsController : ControllerBase

@@ -32,6 +32,8 @@ namespace PlatformService.AsyncDataServices
                 _channel.ExchangeDeclare(exchange: "trigger", type: ExchangeType.Fanout);
 
                 _connection.ConnectionShutdown += RabbitMQ_ConnectionShutdown;
+                // TODO: where is message of RabbitMQ_ConnectionShutdown
+                    // this is not Singleton lifetime but it need to message when connection did shutdown (in theory it need to message and write to console)
 
                 Console.WriteLine("--> Connected to MessageBus");
             }
@@ -48,7 +50,6 @@ namespace PlatformService.AsyncDataServices
             if (_connection.IsOpen)
             {
                 Console.WriteLine("--> RabbitMQ Connection is Open, sending messages...");
-                // TODO: send the message
                 SendMessage(message);
             }
             else

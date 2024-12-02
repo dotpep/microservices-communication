@@ -9,10 +9,9 @@
 - REST API
 - API Gateway (Ingress Nginx Controller, Ingress Nginx Load Balancer)
 - gRPC (sync)
-- RabbitMQ (async)
+- RabbitMQ (async) Event/Message Bus, Producer/Consumer
 - Docker
 - K8s
-- Event Bus
 
 **SRC's:**
 
@@ -251,7 +250,7 @@ Idea: Messangers are published onto the queue if your services are overwhelmed a
 
 > Service 1 | Message Broker | Service 2
 
-`Publusher (Publish) --> Exchange -> Queue 1 |||, Queue 2 ||| --> (Consume) Consumer 1, (Consume) Consumer 2, (Consume) Consumer 3`
+`Publisher (Publish) --> Exchange -> Queue 1 |||, Queue 2 ||| --> (Consume) Consumer 1, (Consume) Consumer 2, (Consume) Consumer 3`
 
 - Delivers Messages to all Queues that are bound to the exchange
 - It ignores the routing key
@@ -262,6 +261,26 @@ Doesn't care who is listening just put messages to Queue.
 **RabbitMQ in K8s:**
 
 - K8s RabbitMQ .yml file configuration is not a Production Quality or Production Class deployment.
+
+---
+
+Producer (Publisher) theory:
+
+...
+
+- Connection to Message Broker
+- Message Bus Client
+- Publish new Platform to the Event
+
+Consumer (Subscriber) theory:
+
+Message Bus Subscriber will run in Background service task and
+will Listen Event Processor and Queue of Producer Event in Message Bus.
+
+- Event Processor
+- Message Bus Subscriber
+- Background Listener Service
+- Listen the Event
 
 ---
 
@@ -703,6 +722,14 @@ public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCr
 - and for CreatePlatform() controller it will be setted as `Event="Platform_Published"` in PlatformPublishedDto.
 
 For Test Listener (Consumer) (in CommandsService):
+
+- run (make run) both services PlatformService and CommandsService
+- request POST: `http://localhost:5000/api/platforms` of Creating new Platform in PlatformService
+- check the logs of both services
+- this Platform will be published/consumed with creation of this Platform in the CommandsService
+- and you can use Created Platform ID in CommandsService
+- to ping/request other endpoints like GET: `http://localhost:6000/api/c/platforms` to Get all Platforms in CommandsService (that was consumed via RabbitMQ)
+- or like POST: (provide existing platformId) `http://localhost:6000/api/c/platforms/{platformID}/commands/` to Create Command For Platform
 
 ---
 

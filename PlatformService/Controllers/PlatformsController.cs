@@ -48,6 +48,8 @@ namespace PlatformService.Controllers
         [HttpGet("{id}", Name = "GetPlatformById")]
         public ActionResult<PlatformReadDto> GetPlatformById(int id)
         {
+            Console.WriteLine("--> Getting Specific Platform by Id....");
+
             var platformSpecificOneItem = _repository.GetPlatformById(id);
 
             if (platformSpecificOneItem != null)
@@ -70,6 +72,9 @@ namespace PlatformService.Controllers
             
 
             // Http Client - Send Sync Message
+            // Comment it and see the difference between
+            // sync and async processing
+            // (sync will wait response, while async will just publish msg to queue and go to next process)
             try
             {
                 await _commandDataClient.SendPlatformToCommand(platformReadDto);
@@ -83,8 +88,13 @@ namespace PlatformService.Controllers
             try
             {
                 var platformPublishedDto = _mapper.Map<PlatformPublishedDto>(platformReadDto);
+                // TODO: make this Event msg (of determination) "Platform_Published"
+                    // constant type and include it in configs.json (store it in config file)
+                
+                // stored definition of Event for determination
                 platformPublishedDto.Event = "Platform_Published";
                 _messageBusClient.PublishNewPlatform(platformPublishedDto);
+                Console.WriteLine($"--> Succesfully Send a message Asyncronously with definition {platformPublishedDto.Event}");
             }
             catch (Exception ex)
             {

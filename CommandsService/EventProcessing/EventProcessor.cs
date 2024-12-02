@@ -11,7 +11,7 @@ namespace CommandsService.EventProcessing
 {
     enum EventType
     {
-        PlatformPublished,
+        PlatformPublished,  // CreatePlatform() in PlatformService
         Undetermined
     }
 
@@ -36,7 +36,7 @@ namespace CommandsService.EventProcessing
             switch (eventType)
             {
                 case EventType.PlatformPublished:
-                    // TODO ProcessEvent()
+                    AddPlatform(message);
                     break;
                 default:
                     break;
@@ -91,7 +91,7 @@ namespace CommandsService.EventProcessing
                 // TODO: make this Event msg (of determination) "Platform_Published"
                 // constant type and include it in configs.json (store it in config file)
                 case "Platform_Published":
-                    Console.WriteLine("--> Platform Published Event Detected of CreatePlatform (EventType.PlatformPublished)");
+                    Console.WriteLine("--> Platform Published Event Detected (EventType.PlatformPublished)");
                     return EventType.PlatformPublished;
                 default:
                     Console.WriteLine("--> Could not determine the Event type (EventType.Undetermined)");
