@@ -9,9 +9,9 @@ namespace CommandsService.Models
         [Required]
         public int Id { get; set; }
 
-        // PlatformService DB Entity, Primary Key
+        // PlatformService DB Entity, Primary Key (class PlatformPublishedDto, prop Id)
         [Required]
-        public string ExternalId { get; set; }
+        public int ExternalId { get; set; }
 
         [Required]
         public string Name { get; set; }
