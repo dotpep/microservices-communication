@@ -24,6 +24,8 @@
 - [ ] API Documentation (Swagger/OpenAPI)
 - [ ] Architectural Solution/Microservices Communication (images of Schemas...)
 
+- [ ] Add SQL Server or other Database for CommandsService in production (and InMemory DB in development)
+
 ---
 
 **Golang:**
@@ -195,9 +197,83 @@ Works under HTTP (TCP) and have Header, Body, HTTP Status code and Use GET, POST
 
 Client requests to REST API.
 
+**HTTP project Use case:**
+
+PlatformService HTTP client sync requests to the CommandsService endpoint,
+to test Inbound Connection and send Platform to the CommandsService.
+
+- PlatformService is the Client
+- request to the CommandsService
+
 ---
 
 **gRPC:**
+
+- google Remote Procedure Call (gRPC)
+- One of the API Architecture Style / Type of API Protocol
+- is RPC-based
+- uses HTTP/2 protocol to transport binary messages (inc. TLS)
+- Focused on High Perfomance
+- Relies on Protocol Buffers (aka protobuf) to defined the contract between endpoints
+    - protobuf is just a file/format like .json named `filename.proto` with structured messages,
+    - defines the service, inputs and outputs
+    - exists at both endpoints, client and server
+    - really forms the contract that both parties have and between two services, each other
+- Multi-language support (C# client can call a Golang/Python service)
+- Frequently used as a method of service to service communication
+- gRPC needs to auto generate code using protoc
+
+**gRPC project Use case:**
+
+When the CommandsService starts we want to use gRPC,
+to reach out to the PlatformService and retrieve all the Platforms
+that PlatformService has.
+
+CommandsService is going to reach out at start up,
+and pull Platforms in PlatformService using gRPC,
+down and it will load ones that it doesn't already have.
+
+- CommandsService is the Client
+- request to the PlatformService
+
+**gRPC in K8s:**
+
+ClusterIP service in PlatformService, provide port
+for gRPC that uses HTTP/2 with TLS or HTTPS.
+
+We don't have HTTPS running in our cluster.
+We need to tell that our gRPC to use only HTTP 2 protocol without TLS,
+with configuration on Kestrel web server running on PlatformService which is server,
+and we tell our Client endpoint to connect to a specific port `777`.
+
+- after changes in `platform-depl.yml` file we need to `kubectl apply -f .\platforms-depl.yml`
+- when you update service code and build/push image you need to `kubectl rollout restart deployment platform-depl` (`platform-depl` is name of deployment to get it `kubectl get deployments`)
+
+**gRPC use HTTP without TLS for K8s (Dotnet):**
+
+`/PlatformService/appsettings.Production.json`:
+
+```json
+...
+{
+    "Kestrel": {
+        "Endpoints": {
+            "Grpc": {
+                "Protocols": "Http2",
+                "Url": "http://platforms-clusterip-srv:777"
+            },
+            "webApi": {
+                "Protocols": "Http1",
+                "Url": "http://platforms-clusterip-srv:80"
+            }
+        }
+    }
+}
+```
+
+**gRPC Questions:**
+
+- is gRPC synchronous or asynchronous
 
 ---
 
@@ -264,6 +340,16 @@ Doesn't care who is listening just put messages to Queue.
 
 ---
 
+**Message Broker Concepts:**
+
+- Producer
+- Consumer
+- Queue???
+- Message Bus???
+- Events???
+- Exchange???
+- ...
+
 Producer (Publisher) theory:
 
 ...
@@ -318,11 +404,13 @@ API Gateway in K8s:
 
 Pod with Ingress Nginx Controller...
 
-**Questions:**
+**K8s Questions:**
 
 - API Gateway vs Ingress Controller vs Load Balancer vs Reverse Proxy
 - Kubernates Imperative (Command Line) and Declarative (Config Files)
 - K8s microservices directory structure solution
+
+- is it necessary to have HTTPS inside K8ss cluster (because K8s cluster will be internal domain, and that you would terminate TLS at Ingress Nginx Gateway) (we can setup it `TLS certificate using LetsEncrypt, certbot`)
 
 ## Running Instructions
 

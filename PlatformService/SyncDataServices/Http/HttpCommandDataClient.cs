@@ -28,13 +28,12 @@ namespace PlatformService.SyncDataServices.Http
                 "application/json"
             );
 
-            // TODO: fix - hard coded URI
             var requestURI = $"{_configuration["CommandService"]}";
             var response = await _httpClient.PostAsync(requestURI, httpContent);
 
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync POST to CommandService was OK!");
+                Console.WriteLine($"--> Sync POST to CommandService was OK! with Id:{plat.Id}, Name:{plat.Name}");
             }
             else {
                 Console.WriteLine("--> Sync POST to CommandService is NOT OK!");
