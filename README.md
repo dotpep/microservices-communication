@@ -559,6 +559,7 @@ Connection to MsSQL (Microsoft SQL Server)
 SQLTools and SQLTools Microsoft SQL Server driver (VS Code extentions to connect) (search: `@tag:sqltools-driver mssql` for driver) (SQLTools and MsSQL driver by Matheus Teixeira):
 
 Connection string:
+
 ```txt
 Server=localhost,1433;Database=Master;User Id=SA;Password=pas55w0rd!
 ```
@@ -682,6 +683,49 @@ RabbitMQ Management Interface Default Login Credentials:
 - username: `guest`
 - password: `guest`
 
+For Test Publisher (in PlatformService):
+
+- run `make run` or `dotnet run` in `PlatformService`
+- request with POST to this endpoint: `http://localhost:5000/api/platforms`
+- make a lot of requests (you can comment SyncClient instruction in `Controllers/PlatformsController.cs` and in `HttpPost`/`CreatePlatform()` method) and see difference between delay of sync and async.
+- also see graph in `http://localhost:15672/` RabbitMQ Management Interface
+
+```cs
+// POST: /api/platforms
+[HttpPost]
+public ActionResult<PlatformReadDto> CreatePlatform(PlatformCreateDto platformCreateDto){
+      // Message Broker Client - Send Async Message
+    platformPublishedDto.Event = "Platform_Published";
+}
+```
+
+- `platformPublishedDto` has Event property to store which event it is (definition of Event in string format)
+- and for CreatePlatform() controller it will be setted as `Event="Platform_Published"` in PlatformPublishedDto.
+
+For Test Listener (Consumer) (in CommandsService):
+
+---
+
+RabbitMQ theory:
+
+- Message Bus Publisher (PlatformService)
+- Event Processor/Processing
+- Event Listener (CommandsService)
+
+---
+
+Dependency Injection Reasons - when you register your services in config services,
+they have what's called a service lifetime (they have different lifetimes):
+
+1. Singleton - created 1st time requested, subsequent requests use the same instance (registered services exist for lifetime of the application).
+2. Scoped - same within a request but created for every new request (exist kind of for every kind of session).
+3. Transient - new instance provided everytime, never the same/reused (exist ones every request).
+
+When we come on to creating our Listening Service that is going to be created as a Singleton service,
+ultimetly it's going to be ther for the lifetime of our application.
+That service is going to call this service and in order for that to happen in order for us to inject this Event Processor service into our Listening service it too has to have a lifetime the same or greator than the service it's being injected to so this service is going to have to be a Singleton service.
+We're going to have to inject it, well we're going to have to create it a reference to it in another way.
+
 ## Step by step
 
 ### Development (Localhost)
@@ -698,6 +742,7 @@ RabbitMQ Management Interface Default Login Credentials:
 5. `kubectl apply -f .\ingress-srv.yml`
 6. `kubectl apply -f .\local-pvc.yml`
 7. `kubectl apply -f .\mssql-plat-depl.yml`
+8. `kubectl apply -f .\rabbitmq-depl.yml`
 
 ---
 
