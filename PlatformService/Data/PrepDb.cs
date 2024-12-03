@@ -34,7 +34,7 @@ namespace PlatformService.Data
 
             if (!context.Platforms.Any())
             {
-                Console.WriteLine("--> Seeding Data...");
+                Console.WriteLine("--> Seeding Prepared Populational Data...");
 
                 context.Platforms.AddRange(
                     new Platform() {Name="Dot Net", Publisher="Microsoft", Cost="Free"},

@@ -414,6 +414,11 @@ Pod with Ingress Nginx Controller...
 
 ## Running Instructions
 
+- [ ] gRPC Error:
+
+- you need to run PlatformService (gRPC server) first
+- and then run CommandsService (gRPC client, implementation returns null and it is crushing the server!)
+
 ## Commands Log
 
 ### DotNET

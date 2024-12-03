@@ -28,7 +28,7 @@ namespace PlatformService.Profiles
                 .ForMember(
                     dest => dest.Publisher,
                     opt => opt.MapFrom(src => src.Publisher)
-                );
+            );
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using AutoMapper;
 using Grpc.Core;
@@ -26,6 +27,7 @@ namespace PlatformService.SyncDataServices.Grpc
             var response = new PlatformResponse();
             var platforms = _repository.GetAllPlatforms();
 
+            Console.WriteLine("--> gRPC call was successfully hitted by Client in the Server");
             foreach (var plat in platforms)
             {
                 response.Platform.Add(_mapper.Map<GrpcPlatformModel>(plat));
